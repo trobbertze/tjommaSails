@@ -45,13 +45,16 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+  'get /tournament'                       : 'TournamentController.tournament',
+  'get /tournament/:tournamentId'         : 'TournamentController.tournament',
+  'get /tournament/:tournamentId/user'    : 'TournamentController.user',
+  'get /tournament/:tournamentId/match'   : 'TournamentController.match',
 
-  'get /tournament/:id/user'    : 'TournamentController.user',
-  'get /tournament/:id/match'   : 'TournamentController.match',
-
-  'get /user/:id/tournament'    : 'UserController.tournament',
-  'post /user/:id/tournament'   : 'UserController.addTournament',
-  'delete /user/:id/tournament' : 'UserController.deleteTournament',
-  'get /user/:id/match'         : 'UserController.match'
+  'get /user'                                     : 'UserController.user',
+  'get /user/:userId'                             : 'UserController.user',
+  'get /user/:userId/tournament'                  : 'UserController.tournament',
+  'post /user/:userId/tournament'                 : 'UserController.addTournament',
+  'delete /user/:userId/tournament/:tournamentId' : 'UserController.deleteTournament',
+  'get /user/:userId/match'                       : 'UserController.match'
 
 };

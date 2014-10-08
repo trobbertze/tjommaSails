@@ -13,15 +13,60 @@ module.exports = {
       required: true
     },
     tournaments: {
-      collection: 'tournament'
+      collection: 'tournament',
+      via: 'users'
+    },
+    matches: {
+      collection: 'match'
     }
   },
 
-  addTournament: function(id, opts, cb) {
-    console.log('Add tournament ' + opts.tournament);
+  GetTournaments: function(id, cb) {
+    User.findOne({id: id})
+      .populate('tournaments')
+      .exec(function(err, user) {
+        if (err) return cb(err);
+        if (!user) return cb('User not found');
+        cb(undefined, user.tournaments);
+    });
   },
 
-  deleteTournament: function(id, cb) {
-    console.log('Delete tournament ' + opts.tournament);
-  }
+  addTournament: function(id, opts, cb) {
+    Tournament.findOne({id: opts.tournamentId}).exec(function(err, tournament) {
+      if (err) return cb(err);
+      if (!tournament) return cb('Tournament not found');
+
+      User.findOne({id: id}).exec(function(err, user) {
+        if (err) return cb(err);
+        if (!user) return cb('User not found');
+        user.tournaments.add(tournament);
+        user.save(cb);
+      });
+    });
+
+  },
+
+  deleteTournament: function(id, opts, cb) {
+    Tournament.findOne({id: opts.tournamentId}).exec(function(err, tournament) {
+      if (err) return cb(err);
+      if (!tournament) return cb('Tournament not found');
+
+      User.findOne({id: id}).exec(function(err, user) {
+        if (err) return cb(err);
+        if (!user) return cb('User not found');
+        user.tournaments.remove(tournament);
+        user.save(cb);
+      });
+    });
+  },
+
+  GetMatches: function(id, cb) {
+    User.findOne({id: id})
+      .populate('matches')
+      .exec(function(err, user) {
+        if (err) return cb(err);
+        if (!user) return cb('User not found');
+        cb(undefined, user.matches);
+    });
+  },
 };

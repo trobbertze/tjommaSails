@@ -6,31 +6,55 @@
  */
 
 module.exports = {
+
+  user: function(req, res) {
+    var query;
+    if (req.params.userId) {
+      query = {id: req.params.userId};
+    }
+    User.find(query)
+    .exec(function(err, result) {
+      res.send(result);
+    });
+  },
+
   tournament: function(req, res) {
-    return res.send('tournament');
+    User.GetTournaments(
+      req.params.userId,
+      function(err, tournaments) {
+        return res.send(tournaments);
+      }
+    );
   },
 
   addTournament: function(req, res) {
     User.addTournament(
-      req.params.id,
+      req.params.userId,
       req.body,
-      function(err) {
-        return res.send('add tournament');
+      function(err, user) {
+        return res.send(user);
       }
     );
   },
 
   deleteTournament: function(req, res) {
     User.deleteTournament(
-      req.params.id,
-      req.body,
-      function(err) {
-        return res.send('delete tournament');
+      req.params.userId,
+      {
+        tournamentId: req.params.tournamentId
+      },
+      function(err, user) {
+        return res.send(user);
       }
     );
   },
 
   match: function(req, res) {
-    return res.send('match');
+    User.GetMatches(
+      req.params.userId,
+      function(err, matches) {
+        return res.send(matches);
+      }
+    );
   }
 };
