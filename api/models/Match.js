@@ -27,14 +27,9 @@ module.exports = {
   },
 
   afterCreate: function(record, cb) {
-    console.log('afterCreate');
     Tournament.findOne({id: record.tournament}).exec(function(err, tournament) {
       if (err) return cb(err);
       if (!tournament) return cb('Tournament not found');
-
-      console.log('tournament');
-      console.log(tournament);
-
       User.find({
         or:[
           {
@@ -46,7 +41,6 @@ module.exports = {
         ]}).exec(function(err, users) {
           if (err) return cb(err);
           _.each(users, function(user) {
-            console.log('Adding saving user');
             user.tournaments.add(tournament);
             user.matches.add(record);
             user.save();
